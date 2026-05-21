@@ -1,10 +1,38 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
     const [notes, setNotes] = useState([]);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+
+    useEffect(() => {
+        loadNotes();
+    }, []);
+
+    useEffect(() => {
+        saveNotes();
+    }, [notes]);
+
+    const loadNotes = async () => {
+        try {
+            const savedNotes = await AsyncStorage.getItem('notes');
+            if (savedNotes !== null) {
+                setNotes(JSON.parse(savedNotes));
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки:', error);
+        }
+    };
+
+    const saveNotes = async () => {
+        try {
+            await AsyncStorage.setItem('notes', JSON.stringify(notes));
+        } catch (error) {
+            console.error('Ошибка сохранения:', error);
+        }
+    };
 
     const addNote = () => {
         if (title.trim() === '' || content.trim() === '') return;
