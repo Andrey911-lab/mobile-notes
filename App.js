@@ -18,10 +18,17 @@ export default function App() {
         setContent('');
     };
 
+    const deleteNote = (id) => {
+        setNotes(notes.filter(note => note.id !== id));
+    };
+
     const renderNote = ({ item }) => (
         <View style={styles.noteItem}>
-            <Text style={styles.noteTitle}>{item.title}</Text>
-            <Text style={styles.noteContent}>{item.content}</Text>
+            <View style={styles.noteContent}>
+                <Text style={styles.noteTitle}>{item.title}</Text>
+                <Text style={styles.noteText}>{item.content}</Text>
+            </View>
+            <Button title="Удалить" onPress={() => deleteNote(item.id)} color="#ff6b6b" />
         </View>
     );
 
@@ -90,6 +97,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     noteItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         borderWidth: 1,
         borderColor: '#eee',
         padding: 12,
@@ -97,12 +107,16 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: '#f9f9f9',
     },
+    noteContent: {
+        flex: 1,
+        marginRight: 12,
+    },
     noteTitle: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 6,
     },
-    noteContent: {
+    noteText: {
         fontSize: 14,
         color: '#666',
     },
