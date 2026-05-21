@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+п»їimport React, { useState } from 'react';
+import { View, Text, TextInput, Button, FlatList } from 'react-native';
 
 export default function App() {
     const [notes, setNotes] = useState([]);
@@ -18,34 +18,40 @@ export default function App() {
         setContent('');
     };
 
+    const renderNote = ({ item }) => (
+        <View>
+            <Text>{item.title}</Text>
+            <Text>{item.content}</Text>
+        </View>
+    );
+
     return (
         <View>
-            <Text>Мои заметки</Text>
+            <Text>РњРѕРё Р·Р°РјРµС‚РєРё</Text>
 
             <TextInput
-                placeholder="Заголовок"
+                placeholder="Р—Р°РіРѕР»РѕРІРѕРє"
                 value={title}
                 onChangeText={setTitle}
             />
 
             <TextInput
-                placeholder="Текст заметки"
+                placeholder="РўРµРєСЃС‚ Р·Р°РјРµС‚РєРё"
                 value={content}
                 onChangeText={setContent}
                 multiline
             />
 
-            <Button title="Добавить заметку" onPress={addNote} />
+            <Button title="Р”РѕР±Р°РІРёС‚СЊ Р·Р°РјРµС‚РєСѓ" onPress={addNote} />
 
             {notes.length === 0 ? (
-                <Text>Нет заметок</Text>
+                <Text>РќРµС‚ Р·Р°РјРµС‚РѕРє</Text>
             ) : (
-                notes.map(note => (
-                    <View key={note.id}>
-                        <Text>{note.title}</Text>
-                        <Text>{note.content}</Text>
-                    </View>
-                ))
+                <FlatList
+                    data={notes}
+                    renderItem={renderNote}
+                    keyExtractor={(item) => item.id.toString()}
+                />
             )}
         </View>
     );
